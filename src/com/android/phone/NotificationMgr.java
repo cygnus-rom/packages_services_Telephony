@@ -938,8 +938,7 @@ public class NotificationMgr {
 
     private boolean isUiccCardProvisioned(int subId) {
         final int PROVISIONED = 1;
-        final int INVALID_STATE = -1;
-        int provisionStatus = INVALID_STATE;
+        int provisionStatus = PROVISIONED;
         IExtTelephony mExtTelephony = IExtTelephony.Stub
                 .asInterface(ServiceManager.getService("extphone"));
         int slotId = SubscriptionController.getInstance().getSlotIndex(subId);
@@ -947,10 +946,8 @@ public class NotificationMgr {
             //get current provision state of the SIM.
             provisionStatus = mExtTelephony.getCurrentUiccCardProvisioningStatus(slotId);
         } catch (RemoteException ex) {
-            provisionStatus = INVALID_STATE;
             if (DBG) log("Failed to get status for slotId: "+ slotId +" Exception: " + ex);
         } catch (NullPointerException ex) {
-            provisionStatus = INVALID_STATE;
             if (DBG) log("Failed to get status for slotId: "+ slotId +" Exception: " + ex);
         }
         return provisionStatus == PROVISIONED;
